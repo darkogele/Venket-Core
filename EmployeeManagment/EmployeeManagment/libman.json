@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "jquery@3.3.1",
+      "destination": "wwwroot/js/Jquery",
+      "files": [ "jquery.min.js" ]
+    },
+    {
+      "library": "knockout@3.5.0",
+      "destination": "wwwroot/js/Knockout","files": ["knockout-min.js",]
+    }
+  ]
+}

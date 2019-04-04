@@ -1,0 +1,37 @@
+﻿@using Newtonsoft.Json
+@using System.Web
+@model EmployeeManagment.Controllers.GiftModel[]
+@{
+    ViewData["Title"] = "KO";
+}
+
+<script src="~/js/Jquery/jquery.min.js"></script>
+<script src="~/js/Knockout/knockout-min.js"></script>
+<h1>Index</h1>
+<p>You have asked for <span data-bind="text: gifts().length"> </span> gift(s)</p>
+
+<table>
+    <tbody data-bind="template: { name: 'giftRowTemplate', foreach: gifts }"></tbody>
+</table>
+
+<script type="text/html" id="giftRowTemplate">
+    <tr>
+        <td>Gift name: <input data-bind="value: Title" /></td>
+        <td>Price: \$ <input data-bind="value: Price" /></td>
+    </tr>
+</script>
+
+
+
+
+<script type="text/javascript">
+    //var initialData = <%= new JavaScriptSerializer().Serialize(Model) %>;
+    var initialData = '@(Html.Raw(JsonConvert.SerializeObject(Model)))';
+</script>
+
+<script>
+    var viewModel = {
+        gifts: ko.observableArray(JSON.parse(initialData))
+    };
+    ko.applyBindings(viewModel);
+</script>

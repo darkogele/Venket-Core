@@ -1,0 +1,2 @@
+# Venket-Core
+Trening

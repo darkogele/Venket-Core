@@ -1,0 +1,1 @@
+﻿AddSingleton vs AddScoped vs AddTransient = http://prntscr.com/neiyai   &&   http://prntscr.com/neizc4

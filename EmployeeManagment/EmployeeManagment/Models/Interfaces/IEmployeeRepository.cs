@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 
 namespace EmployeeManagment.Models
 {
-    public  interface IEmployeeRepository
+    public interface IEmployeeRepository
     {
         Employee GetEmployee(int Id);
         List<Employee> GetEmployees();
         IEnumerable<Employee> GetEmployeesAll();
         Employee Add(Employee employee);
+        Employee Update(Employee employeeChanges);
+        Employee Delete(int Id);
     }
 }

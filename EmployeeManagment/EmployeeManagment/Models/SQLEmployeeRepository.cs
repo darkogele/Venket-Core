@@ -19,6 +19,7 @@ namespace EmployeeManagment.Models
         public Employee Add(Employee employee)
         {
             _context.Employees.Add(employee);
+            _context.SaveChanges();
             return employee;
         }
 

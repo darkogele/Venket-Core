@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using EmployeeManagment.Models;
+using Microsoft.AspNetCore.Http;
 
-namespace EmployeeManagment.Models
+namespace EmployeeManagment.Models.ViewModels
 {
-    public class Employee
-    {
-        [Key]
-        public int Id { get; set; }
-        [Required] 
+    public class EmployeeCreateViewModel
+    {      
+        [Required]
         [MaxLength(50, ErrorMessage = "Name cannot exceed 50 characters")]
         public string Name { get; set; }
         [Required]
@@ -19,6 +19,6 @@ namespace EmployeeManagment.Models
         public string Email { get; set; }
         [Required]
         public Dept? Department { get; set; }
-        public string PhotoPath { get; set; }
+        public IFormFile Photo { get; set; }
     }
 }

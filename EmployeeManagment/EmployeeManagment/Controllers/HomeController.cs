@@ -56,7 +56,8 @@ namespace EmployeeManagment.Controllers
             if (ModelState.IsValid)
             {
                 string uniqieFileName = null;
-                if (model.Photo != null)
+
+                if (model.Photo != null && validationForOnlyImage(model.Photo.FileName))
                 {
                     var uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath + "\\images\\Users");
                     uniqieFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
@@ -75,8 +76,24 @@ namespace EmployeeManagment.Controllers
                 _employeeRepository.Add(newEmployee);
                 return RedirectToAction("Details", new { id = newEmployee.Id });
             }
-
             return View();
         }
+        #region Private Methods
+        private static bool validationForOnlyImage(string file)
+        {
+            string[] imageTypes = { "jpg", "bmp", "gif", "png" };
+            bool contains = false;
+            foreach (var type in imageTypes)
+            {
+                contains = file.Contains(type);
+                if (contains)
+                {
+                    return contains;
+                }
+            }
+            return contains;
+        }
+        #endregion
+
     }
 }

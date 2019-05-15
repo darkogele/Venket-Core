@@ -30,20 +30,15 @@ namespace EmployeeManagment.Controllers
         }
 
         public IActionResult Details(int? id)
-        {
-            Employee model = _employeeRepository.GetEmployee(1);
-            ViewBag.PageTitle = "Employee Details";
-            //  return View(model);
+        {        
+            ViewBag.PageTitle = "Employee Details";        
             var homeDetailsViewModel = new HomeDetailsViewModel();
             homeDetailsViewModel.Employee = _employeeRepository.GetEmployee(id ?? 1);
-            homeDetailsViewModel.PageTitle = "Employee Details";
-            //{             
-            //    Employee = _employeeRepository.GetEmployee(1),
-            //    PageTitle = "Employee Details"
-            //};
+            homeDetailsViewModel.PageTitle = "Employee Details";        
             return View(homeDetailsViewModel);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             // ViewBag.EmpCount = _employeeRepository.GetEmployeesAll().Count();
@@ -57,7 +52,7 @@ namespace EmployeeManagment.Controllers
             {
                 string uniqieFileName = null;
 
-                if (model.Photo != null && validationForOnlyImage(model.Photo.FileName))
+                if (model.Photo != null && ValidationForOnlyImage(model.Photo.FileName))
                 {
                     var uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath + "\\images\\Users");
                     uniqieFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
@@ -78,8 +73,32 @@ namespace EmployeeManagment.Controllers
             }
             return View();
         }
+
+        public IActionResult Edit(int id)
+        {
+            var employee = _employeeRepository.GetEmployee(id);
+            var employeeEditViewModel = new EmployeeEditViewModel
+            {
+                Id = employee.Id,
+                Name = employee.Name,
+                Email = employee.Email,
+                Department = employee.Department,
+                ExistingPhotoPath = employee.PhotoPath
+            };
+
+            return View(employeeEditViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(EmployeeEditViewModel model)
+        {
+           // TO DO 
+           // _employeeRepository.Update(emp);
+            return View();
+        }
+
         #region Private Methods
-        private static bool validationForOnlyImage(string file)
+        private static bool ValidationForOnlyImage(string file)
         {
             string[] imageTypes = { "jpg", "bmp", "gif", "png" };
             bool contains = false;

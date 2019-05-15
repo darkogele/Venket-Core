@@ -56,13 +56,15 @@ namespace EmployeeManagment.Controllers
             if (ModelState.IsValid)
             {
                 string uniqieFileName = null;
-
-                if (model.Photo != null && validationForOnlyImage(model.Photo.FileName))
+                foreach (var photo in model.Photos)
                 {
-                    var uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath + "\\images\\Users");
-                    uniqieFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
-                    var filePath = Path.Combine(uploadsFolder, uniqieFileName);
-                    model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                    if (photo != null)
+                    {
+                        var uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath + "\\images\\Users");
+                        uniqieFileName = Guid.NewGuid().ToString() + "_" + photo.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqieFileName);
+                        photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                    }
                 }
 
                 var newEmployee = new Employee
@@ -78,8 +80,16 @@ namespace EmployeeManagment.Controllers
             }
             return View();
         }
-        #region Private Methods
-        private static bool validationForOnlyImage(string file)
+
+        #region Helper Methods
+
+        /// <summary>
+        /// TO DO place him inside service layer for the app 
+        /// Helper for Picutre formats that we can support 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        private static bool ValidationForOnlyImage(string file)
         {
             string[] imageTypes = { "jpg", "bmp", "gif", "png" };
             bool contains = false;
@@ -93,7 +103,7 @@ namespace EmployeeManagment.Controllers
             }
             return contains;
         }
-        #endregion
 
+        #endregion
     }
 }

@@ -30,11 +30,11 @@ namespace EmployeeManagment.Controllers
         }
 
         public IActionResult Details(int? id)
-        {        
-            ViewBag.PageTitle = "Employee Details";        
+        {
+            ViewBag.PageTitle = "Employee Details";
             var homeDetailsViewModel = new HomeDetailsViewModel();
             homeDetailsViewModel.Employee = _employeeRepository.GetEmployee(id ?? 1);
-            homeDetailsViewModel.PageTitle = "Employee Details";        
+            homeDetailsViewModel.PageTitle = "Employee Details";
             return View(homeDetailsViewModel);
         }
 
@@ -50,30 +50,20 @@ namespace EmployeeManagment.Controllers
         {
             if (ModelState.IsValid)
             {
-                string uniqieFileName = null;
-
-                if (model.Photo != null && ValidationForOnlyImage(model.Photo.FileName))
-                {
-                    var uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath + "\\images\\Users");
-                    uniqieFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
-                    var filePath = Path.Combine(uploadsFolder, uniqieFileName);
-                    model.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
-                }
-
                 var newEmployee = new Employee
                 {
                     Name = model.Name,
                     Email = model.Email,
                     Department = model.Department,
-                    PhotoPath = uniqieFileName
+                    PhotoPath = ProcesUploadedFile(model)
                 };
-
                 _employeeRepository.Add(newEmployee);
                 return RedirectToAction("Details", new { id = newEmployee.Id });
             }
             return View();
         }
 
+        [HttpGet]
         public IActionResult Edit(int id)
         {
             var employee = _employeeRepository.GetEmployee(id);
@@ -85,19 +75,53 @@ namespace EmployeeManagment.Controllers
                 Department = employee.Department,
                 ExistingPhotoPath = employee.PhotoPath
             };
-
             return View(employeeEditViewModel);
         }
 
         [HttpPost]
         public IActionResult Edit(EmployeeEditViewModel model)
         {
-           // TO DO 
-           // _employeeRepository.Update(emp);
-            return View();
+            if (ModelState.IsValid)
+            {
+                var updateEmployee = _employeeRepository.GetEmployee(model.Id);
+                updateEmployee.Id = model.Id;
+                updateEmployee.Name = model.Name;
+                updateEmployee.Email = model.Email;
+                updateEmployee.Department = model.Department;
+                if (model.Photo != null)
+                {
+                    if (model.ExistingPhotoPath != null)
+                    {
+                        var filePath = Path.Combine(hostingEnvironment.WebRootPath + @"\images\users\" + model.ExistingPhotoPath);
+                        System.IO.File.Delete(filePath);
+                    }
+                    updateEmployee.PhotoPath = ProcesUploadedFile(model);
+                }
+
+                _employeeRepository.Update(updateEmployee);           
+                TempData["updateDone"] = "Employee was Updated";
+            }
+            return RedirectToAction("index");
         }
 
         #region Private Methods
+
+        private string ProcesUploadedFile(EmployeeCreateViewModel model)
+        {
+            string uniqieFileName = null;
+            if (model.Photo != null && ValidationForOnlyImage(model.Photo.FileName))
+            {
+                var uploadsFolder = Path.Combine(hostingEnvironment.WebRootPath + @"\images\Users");
+                uniqieFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                var filePath = Path.Combine(uploadsFolder, uniqieFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Photo.CopyTo(fileStream);
+                }               
+            }
+            return uniqieFileName;
+        }
+
         private static bool ValidationForOnlyImage(string file)
         {
             string[] imageTypes = { "jpg", "bmp", "gif", "png" };
@@ -112,7 +136,7 @@ namespace EmployeeManagment.Controllers
             }
             return contains;
         }
-        #endregion
 
+        #endregion
     }
 }

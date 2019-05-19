@@ -5,6 +5,13 @@
 }
 
 <div class="card-deck">
+
+    @if ( TempData["updateDone"] != null)
+    {
+        //To do Make it Disapear after 3 sec bootstrap class 
+        //<h3 style="text-align:center">@TempData["updateDone"]</h3>
+    }
+
     @foreach (var employee in Model)
     {
         var imagePath = Url.Content("~/images/users/" + (employee.PhotoPath ?? "noimage.jpg"));
@@ -15,9 +22,10 @@
             <img class="card-img-top imageThumbnail" src="@imagePath" asp-append-version="true" /> @*Sekoj pat koga se menuva serverskata slika se stava drug hash*@
             <div class="card-footer text-center">
                 <a asp-controller="home" asp-action="details" asp-route-id="@employee.Id" class="btn btn-primary m-1">View</a> @*Najnova Tehnika tag helpers*@
-                <a asp-controller="home" asp-action="edit" asp-route-id="@employee.Id"  class="btn btn-primary m-1">Edit</a>
+                <a asp-controller="home" asp-action="edit" asp-route-id="@employee.Id" class="btn btn-primary m-1">Edit</a>
                 <a href="#" class="btn btn-danger m-1">Delete</a>
             </div>
         </div>
     }
+
 </div>

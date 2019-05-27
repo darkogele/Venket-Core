@@ -31,10 +31,20 @@ namespace EmployeeManagment.Controllers
 
         public IActionResult Details(int? id)
         {
-            ViewBag.PageTitle = "Employee Details";
-            var homeDetailsViewModel = new HomeDetailsViewModel();
-            homeDetailsViewModel.Employee = _employeeRepository.GetEmployee(id ?? 1);
-            homeDetailsViewModel.PageTitle = "Employee Details";
+            // throw new Exception("Ne radi bre") //-- za test
+            var employee = _employeeRepository.GetEmployee(id.Value);
+            if (employee == null)
+            {
+                Response.StatusCode = 404;
+                return View("EmployeeNotFound", id.Value);
+            }
+
+            var homeDetailsViewModel = new HomeDetailsViewModel
+            {
+                Employee = employee,
+                PageTitle = "Employee Details"
+            };
+
             return View(homeDetailsViewModel);
         }
 
@@ -98,7 +108,7 @@ namespace EmployeeManagment.Controllers
                     updateEmployee.PhotoPath = ProcesUploadedFile(model);
                 }
 
-                _employeeRepository.Update(updateEmployee);           
+                _employeeRepository.Update(updateEmployee);
                 TempData["updateDone"] = "Employee was Updated";
             }
             return RedirectToAction("index");
@@ -117,7 +127,7 @@ namespace EmployeeManagment.Controllers
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     model.Photo.CopyTo(fileStream);
-                }               
+                }
             }
             return uniqieFileName;
         }

@@ -1,6 +1,6 @@
 ﻿@model HomeDetailsViewModel
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.PageTitle;
     var photoPath = Url.Content("~/images/users/" + (Model.Employee.PhotoPath ?? "noimage.jpg"));   
 }
 

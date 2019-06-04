@@ -7,6 +7,7 @@ using EmployeeManagment.Models;
 using EmployeeManagment.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace EmployeeManagment.Controllers
 {
@@ -14,11 +15,13 @@ namespace EmployeeManagment.Controllers
     {
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IHostingEnvironment hostingEnvironment;
+        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(IEmployeeRepository employeeRepository, IHostingEnvironment hostingEnvironment)
+        public HomeController(IEmployeeRepository employeeRepository, IHostingEnvironment hostingEnvironment, ILogger<HomeController> logger)
         {
             _employeeRepository = employeeRepository;
             this.hostingEnvironment = hostingEnvironment;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -32,6 +35,14 @@ namespace EmployeeManagment.Controllers
         public IActionResult Details(int? id)
         {
             // throw new Exception("Ne radi bre") //-- za test
+
+            _logger.LogTrace("Trace log");
+            _logger.LogDebug("Debug log");
+            _logger.LogInformation("Information log");
+            _logger.LogWarning("Warrning log");
+            _logger.LogError("Error log");
+            _logger.LogCritical("Critical log");
+
             var employee = _employeeRepository.GetEmployee(id.Value);
             if (employee == null)
             {

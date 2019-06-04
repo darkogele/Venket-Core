@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomasnaVenci", "DomasnaVenc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventsAndDelegates", "EventsAndDelegates\EventsAndDelegates.csproj", "{08E735C6-D72E-4F23-95CA-F717C36FC6E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deserialize", "Deserialize\Deserialize.csproj", "{0A0508FE-3118-4EFE-AFB6-C70AD5852508}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deserialize", "Deserialize\Deserialize.csproj", "{0A0508FE-3118-4EFE-AFB6-C70AD5852508}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

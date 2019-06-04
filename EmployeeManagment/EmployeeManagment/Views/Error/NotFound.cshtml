@@ -4,11 +4,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+    <h1>Sorry, the resource you requested could not be found </h1>
+
+@* Extra data if need it to be shown
 <h1>@ViewBag.ErrorMessage</h1>
 
 <h1>@ViewBag.Path</h1>
 
 <h1>@ViewBag.QS</h1>
+
+*@
 
 <a asp-action="index" asp-controller="home">
     Click here to navigate to the home page

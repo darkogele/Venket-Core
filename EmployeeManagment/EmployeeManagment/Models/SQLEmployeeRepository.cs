@@ -4,16 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EmployeeManagment.Models
 {
     public class SQLEmployeeRepository : IEmployeeRepository
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<SQLEmployeeRepository> _logger;
 
-        public SQLEmployeeRepository(AppDbContext context)
+        public SQLEmployeeRepository(AppDbContext context, ILogger<SQLEmployeeRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public Employee Add(Employee employee)
@@ -36,7 +39,14 @@ namespace EmployeeManagment.Models
 
         public Employee GetEmployee(int Id)
         {
-           return _context.Employees.Find(Id); // NOVO Samo davas ID i go vraka ne sporedue 
+            _logger.LogTrace("Trace log");
+            _logger.LogDebug("Debug log");
+            _logger.LogInformation("Information log");
+            _logger.LogWarning("Warrning log");
+            _logger.LogError("Error log");
+            _logger.LogCritical("Critical log");
+
+            return _context.Employees.Find(Id); // NOVO Samo davas ID i go vraka ne sporedue 
         }
 
         public List<Employee> GetEmployees()

@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using EmployeeManagement.Models.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Identity;
 
 namespace EmployeeManagment
 {
@@ -23,10 +24,11 @@ namespace EmployeeManagment
         {
             _config = config;
         }
-       
+
         public void ConfigureServices(IServiceCollection services) //DI container
         {
             services.AddDbContextPool<AppDbContext>(options => options.UseSqlServer(_config.GetConnectionString("EmployeeDBConnection")));
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>();
             services.AddScoped<IEmployeeRepository, SQLEmployeeRepository>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddXmlSerializerFormatters();
         }
@@ -44,7 +46,7 @@ namespace EmployeeManagment
             }
 
             app.UseStaticFiles();
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
